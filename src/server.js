@@ -6,11 +6,10 @@ const app = express();
 
 app.use(bodyParser.json());
 
-const withDB = async (operations, RES) => {
+const withDB = async (operations, res) => {
 	try {
 		const client = await MongoClient.connect("mongodb://localhost:27017", {
-			useNewUrlParser: true,
-			useUnifiedTopology: true
+			useNewUrlParser: true
 		});
 		const db = client.db("my-blog");
 
@@ -18,7 +17,7 @@ const withDB = async (operations, RES) => {
 
 		client.close();
 	} catch (error) {
-		res.status(500).json({ message: "error connecting", error });
+		res.status(500).json({ message: "Error connecting to db", error });
 	}
 };
 
@@ -79,4 +78,5 @@ app.post("/api/articles/:name/add-comment", (req, res) => {
 		res.status(200).json(updatedArticleInfo);
 	}, res);
 });
+
 app.listen(8000, () => console.log("Listening on port 8000"));
